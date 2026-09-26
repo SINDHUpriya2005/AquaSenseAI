@@ -1,0 +1,122 @@
+:root {
+  /* --- Color --------------------------------------------------------- */
+  --bg-deep: #071b24;
+  --bg-surface: #0e2a35;
+  --bg-elevated: #143647;
+  --bg-elevated-hover: #1a4256;
+  --border-subtle: #1e4356;
+  --border-strong: #2b5872;
+
+  --accent-aqua: #35d0c0;
+  --accent-aqua-dim: rgba(53, 208, 192, 0.14);
+  --accent-blue: #4f9bd9;
+  --accent-amber: #f2a93b;
+  --accent-amber-dim: rgba(242, 169, 59, 0.14);
+  --accent-coral: #ff6b5b;
+  --accent-coral-dim: rgba(255, 107, 91, 0.14);
+  --accent-lime: #8fd694;
+  --accent-lime-dim: rgba(143, 214, 148, 0.14);
+
+  --text-primary: #eaf6f5;
+  --text-secondary: #8fadb5;
+  --text-muted: #557079;
+
+  /* --- Type ------------------------------------------------------------ */
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "Consolas", monospace;
+
+  /* --- Layout ------------------------------------------------------------ */
+  --sidebar-width: 248px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  --shadow-panel: 0 12px 32px rgba(2, 12, 16, 0.35);
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-deep);
+  background-image: radial-gradient(circle at 12% -10%, rgba(53, 208, 192, 0.08), transparent 42%),
+    radial-gradient(circle at 90% 0%, rgba(79, 155, 217, 0.06), transparent 40%);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-aqua);
+  outline-offset: 2px;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

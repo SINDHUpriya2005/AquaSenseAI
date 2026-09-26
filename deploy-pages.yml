@@ -1,0 +1,68 @@
+name: Deploy frontend to GitHub Pages
+
+# GitHub Pages only serves static files, so this workflow builds and deploys
+# the React (Vite) frontend only. The FastAPI + MongoDB backend cannot run
+# on Pages - it needs to be hosted separately (Render, Railway, Fly.io, a VM,
+# etc). Point VITE_API_BASE_URL (below) at that backend's public URL before
+# this will actually be able to log in / load data.
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    # Pinned explicitly rather than "ubuntu-latest" so the runner OS doesn't
+    # shift out from under this workflow when GitHub rolls the "latest" alias
+    # forward (e.g. the Oct 19, 2026 Ubuntu 26 migration).
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Build
+        working-directory: frontend
+        env:
+          # Project pages are served from /<repo-name>/, not the domain root.
+          VITE_BASE_PATH: "/${{ github.event.repository.name }}/"
+          # Set this to your deployed backend's URL, e.g. via a repo variable
+          # (Settings -> Secrets and variables -> Actions -> Variables) named
+          # VITE_API_BASE_URL. Falls back to localhost if unset, which only
+          # works for local testing, not the deployed site.
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
+  deploy:
+    runs-on: ubuntu-24.04
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
